@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Attendance Tracker Sheet</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+        
+        <style>
+            /* --- 1. iOS AESTHETIC GLOBAL STYLES --- */
+            body {
+                /* Modern Sans-serif Font Stack (Similar to iOS/Apple System Font) */
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                min-height: 100vh;
+                color: #1c1c1e; /* Dark, readable text */
+                
+                /* Aesthetic Gradient Background: Soft, light gray to off-white/subtle blue */
+                background: linear-gradient(135deg, #f0f0f5 0%, #ffffff 100%);
+            }
+            
+            h1, h2 {
+                font-weight: 700;
+                color: #000000;
+            }
+            
+            /* --- 2. CARD STYLING (iOS Floating Card) --- */
+            .card-aesthetic {
+                margin-top: 50px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                
+                /* iOS Card Appearance */
+                padding: 30px;
+                border-radius: 18px; /* High rounding */
+                background-color: #ffffff;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), /* Stronger shadow for depth */
+                            0 4px 10px rgba(0, 0, 0, 0.05); 
+                
+                width: 100%;
+                max-width: 450px; /* Constrain size */
+                margin-left: auto;
+                margin-right: auto;
+                border: none;
+            }
+            
+            /* --- 3. INPUT AND DATE PICKER STYLING --- */
+            label {
+                font-size: 18px;
+                margin-bottom: 15px;
+                font-weight: 500;
+                color: #3a3a3c;
+            }
+            
+            input[type="date"] {
+                padding: 10px 15px;
+                border-radius: 10px; 
+                border: 1px solid #d1d1d6;
+                margin-bottom: 25px;
+                font-size: 16px;
+                color: #007aff;
+                text-align: center;
+                box-sizing: border-box;
+                width: 200px;
+                appearance: textfield;
+                -moz-appearance: textfield; 
+            }
+            
+            /* --- 4. BUTTON STYLING (Modern & Aesthetic) --- */
+            .btn-aesthetic {
+                background-color: #007aff; /* iOS Blue */
+                color: #fff;
+                border: none;
+                padding: 12px 30px;
+                border-radius: 10px;
+                cursor: pointer;
+                font-size: 16px;
+                font-weight: 600;
+                transition: background-color 0.2s ease, transform 0.1s ease;
+                box-shadow: 0 4px 10px rgba(0, 122, 255, 0.3);
+            }
+            
+            .btn-aesthetic:hover {
+                background-color: #005bb5;
+                transform: translateY(-1px);
+                box-shadow: 0 6px 15px rgba(0, 122, 255, 0.4);
+            }
+            
+            /* --- 5. TABLE STYLING --- */
+            .table-aesthetic {
+                background-color: #ffffff;
+                border-radius: 10px;
+                overflow: hidden; 
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+                margin-top: 30px !important;
+            }
+            
+            .table-aesthetic thead th {
+                background-color: #f7f7f7;
+                border-bottom: 2px solid #e5e5ea;
+                font-weight: 600;
+                color: #3a3a3c;
+            }
+            
+            .table-aesthetic tbody td {
+                border-top: 1px solid #f2f2f7;
+                padding: 12px;
+                color: #1c1c1e;
+            }
+            
+            .table-aesthetic tbody tr:last-child td {
+                border-bottom: none;
+            }
+
+            /* Main container padding adjustment */
+            .container-fluid {
+                padding-top: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container-fluid">
+            
+            <div class="text-center mb-5">
+                <h1 class="display-4">Attendance Tracker Sheet</h1>
+            </div>
+        
+            <form action="/attendance" method="POST" id="attn-form" class="card-aesthetic">
+                <label for="selected_date">Select Date:</label>
+                <input type="date" id="selected_date" name="selected_date" required value="{{ selected_date }}">
+                <button type="submit" class="btn-aesthetic">Show attendance</button>
+            </form>
+
+            <div class="container mt-5">
+                {% if no_data %}
+                <div class="alert alert-warning text-center" role="alert">
+                    No attendance data available for the selected date ({{ selected_date }}).
+                </div>
+                {% endif %}
+                
+                <h2>Attendance Data Table</h2>
+                <table class="table table-aesthetic">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for name, time, date in attendance_data %}
+                        <tr>
+                            <td>{{ name }}</td>
+                            <td>{{ time }}</td>
+                            <td>{{ date }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</body>
+</html>
